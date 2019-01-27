@@ -1,0 +1,11 @@
+{
+    "name": "BlueprintMaker",
+    "version": "0.1.0",
+    "title": "Blueprint Maker",
+    "author": "Philippe Beaudoin",
+    "contact": "",
+    "homepage": "",
+    "factorio_version": "0.16",
+    "dependencies": ["base >= 0.16"],
+    "description": "A factorio plugin to extract blueprints with extra tagging information. Useful for creating blueprints in other plugins."
+}
