@@ -10,6 +10,7 @@ function register_commands()
     commands.add_command('field', 'Add some field details to the selected entity.', field)
     commands.add_command('getfield', 'Get the field details of the selected entity.', getfield)
     commands.add_command('filename', 'Set the filename for the next saved entity.', filename)
+    commands.add_command('clearall', 'Clear item-on-ground, resources and enemy entities.', clearall)
 end
 
 function field(command)
@@ -49,9 +50,32 @@ function filename(command)
     game.players[command.player_index].print('Set filename to "' .. command.parameter .. '"')
 end
 
+function clearall(command)
+    clearallon(game.players[command.player_index].surface)
+end
+
+
+function clearallon(surface)
+    -- Uncomment and edit to do some renaming when needed.
+    -- for unit_number, field in pairs(global.fields) do
+    --     a, b = string.match(field, '^(.*)machine(%[.*)$')
+    --     if a and b then
+    --         global.fields[unit_number] = a .. 'machines' .. b
+    --     end
+    -- end
+
+    for _, entity in pairs(surface.find_entities_filtered{force="enemy"}) do
+        entity.destroy()
+    end
+    for _, entity in pairs(surface.find_entities_filtered{name={'item-on-ground','coal','copper-ore','crude-oil','iron-ore','stone','uranium-ore'}}) do
+        entity.destroy()
+    end
+end
+
 script.on_event(defines.events.on_player_setup_blueprint, function(event)
     global.fields = global.fields or {}
     local player = game.players[event.player_index]
+    clearallon(player.surface)
     local entities = player.surface.find_entities(event.area)
     local tiles = player.surface.find_tiles_filtered{area = event.area, name = {
         'concrete', 'hazard-concrete-left', 'hazard-concrete-right', 'refined-concrete',
